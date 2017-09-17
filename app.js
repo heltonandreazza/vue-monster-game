@@ -35,7 +35,8 @@ new Vue({
       this.monsterAttack();
     },
     giveUp: function () {
-
+      if(confirm('are you sure?'))
+        this.gameIsRunning = false;
     },
     monsterAttack: function () {
       var damage = this.calculateDamage(12, 5)
