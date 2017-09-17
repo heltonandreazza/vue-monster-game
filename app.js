@@ -3,7 +3,8 @@ new Vue({
   data: {
     playerHealth: 100,
     monsterHealth: 100,
-    gameIsRunning: false
+    gameIsRunning: false,
+    turns: []
   },
   methods: {
     startGame: function () {
@@ -12,9 +13,12 @@ new Vue({
       this.monsterHealth = 100;
     },
     attack: function () {
-      var damage = this.calculateDamage(10, 3)
+      var damage = this.calculateDamage(10, 3);
       this.monsterHealth -= damage;
-
+      this.turns.unshift({
+        isPlayer: true,
+        text: 'Player hits Monter for ' + damage
+      });
       if (this.checkWin()) return;
 
       this.monsterAttack()
@@ -22,7 +26,10 @@ new Vue({
     specialAttack: function () {
       var damage = this.calculateDamage(20, 10)
       this.monsterHealth -= damage;
-
+      this.turns.unshift({
+        isPlayer: true,
+        text: 'Player hits Monter for ' + damage
+      });
       if (this.checkWin()) return;
       this.monsterAttack()
     },
@@ -32,15 +39,25 @@ new Vue({
       } else {
         this.playerHealth = 100;
       }
+      this.turns.unshift({
+        isPlayer: true,
+        text: 'Player hiels itself for 10'
+      });
       this.monsterAttack();
     },
     giveUp: function () {
-      if(confirm('are you sure?'))
+      if (confirm('are you sure?')) {
         this.gameIsRunning = false;
+        this.turns = []
+      }
     },
     monsterAttack: function () {
       var damage = this.calculateDamage(12, 5)
       this.playerHealth -= damage;
+      this.turns.unshift({
+        isPlayer: false,
+        text: 'Monter hits Player for ' + damage
+      });
 
       this.checkWin()
     },
